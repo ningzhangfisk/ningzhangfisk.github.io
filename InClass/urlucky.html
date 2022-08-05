@@ -8,6 +8,12 @@
   
 </head>
 <body>
+  
+  <div style='text-align: center;'>
+    <select id='selCourse' name='selCourse' style='line-height: 50px; width: 300px;' onchange='getSelectedCourse(this)'>
+      <option value='0' disabled selected>Please select a course!</option>
+    </select>
+  </div>
 
   <script>
     $( document ).ready(function() {
