@@ -20,7 +20,7 @@
   <option value="6">Grade 6</option>
 </select>
 
-<br>
+
 
 <label for="mode">Choose a mode:</label>
 
@@ -34,7 +34,7 @@
 </select>
 
 
-<br>
+
 
 <label for="missing">Choose # of missing characters:</label>
 
@@ -52,15 +52,27 @@
 </select>
 
 
-<br>
+<label for="shortcuts">shortcuts:</label>
 
-<audio controls id="dict_audio">
+<select name="shortcuts" id="shortcuts" onchange="onShortcutsChange()">
+  <option value="1">space -> start/next word</option>
+  <option value="2">return -> pronounce word</option>
+  <option value="3">shift -> show/hide accuracy</option>
+ 
+
+</select>
+
+
+<br><br><br><br>
+
+
+
+<audio controls id="dict_audio" hidden>
   
-  <source id="dict_src" src="https://dict.youdao.com/dictvoice?type=0&audio=apple" type="audio/mpeg">
+  <source id="dict_src" src="https://dict.youdao.com/dictvoice?type=0&audio=abandon" type="audio/mpeg">
 Your browser does not support the audio element.
 </audio>
 
-<br>
 
 
 <audio controls id="correct_audio" hidden>
@@ -75,7 +87,6 @@ Your browser does not support the audio element.
 Your browser does not support the audio element.
 </audio>
 
-<br>
 
 
 
@@ -106,10 +117,15 @@ Your browser does not support the audio element.
 
 </center>
 
+<center>
+  <p hidden style="color:blue; font-size: 50px;" id="stats">Total: 0 | Correct: 0 | Accuracy: 0%</p>
+</center>
+
 
 <script type="text/javascript">
 
- 
+ var total_trials = 0;
+ var total_correct = 0;
 
 
 
@@ -185,6 +201,7 @@ Your browser does not support the audio element.
   }
 
   $('body').on('keyup', function(event){
+    //console.log(event.keyCode);
 
     if(pausing_now) {return};
     
@@ -192,6 +209,9 @@ Your browser does not support the audio element.
     
 
     if((event.keyCode>=65 && event.keyCode<=90)){
+
+      total_trials += 1;
+
       var chr = String.fromCharCode(event.keyCode).toLowerCase();
       //missing_indice = [];
      //characters = [];
@@ -214,6 +234,7 @@ Your browser does not support the audio element.
         missing_indice.shift();
         var audio = document.getElementById('correct_audio');
         audio.play();
+        total_correct += 1;
 
       }else{
 
@@ -238,11 +259,24 @@ Your browser does not support the audio element.
 
       }
 
+      // statistics
+
+      
+
+      var stats = "Total: " + total_trials + " | Correct: " + total_correct + " | Accuracy: " + ((total_correct/total_trials)*100| 0) + "%";
+      document.getElementById("stats").innerHTML = stats;
+
       
 
         
 
     }
+
+    if(event.keyCode==16){ //shift to toggle stats
+      jQuery("#stats").toggle();
+
+    }
+
 
 
     if(event.keyCode == 32){ // 32 => space key => change to a new word
