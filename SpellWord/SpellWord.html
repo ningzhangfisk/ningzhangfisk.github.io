@@ -267,7 +267,14 @@ Your browser does not support the audio element.
         var word = document.getElementById(id).innerHTML;
         //console.log(word);
 
-        // get audio
+        
+
+  // get image
+  id = "url"+idx;
+  var url = document.getElementById(id).innerHTML;
+  $('#bg_img').attr( 'src',url);
+
+  // get audio
         var src="https://dict.youdao.com/dictvoice?type=0&audio="+word; 
 
         var audio = document.getElementById('dict_audio');
@@ -276,11 +283,6 @@ Your browser does not support the audio element.
   $('#dict_src').attr( 'src',src);
 
   audio.load();
-
-  // get image
-  id = "url"+idx;
-  var url = document.getElementById(id).innerHTML;
-  $('#bg_img').attr( 'src',url);
 
   // 
   var letters = word.split('');
