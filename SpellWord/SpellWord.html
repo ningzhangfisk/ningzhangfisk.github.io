@@ -52,6 +52,20 @@
 </select>
 
 
+<label for="case">UPPERCASE or lowercase:</label>
+
+<select name="case" id="case" onchange="onCaseChange()">
+  
+
+  
+  <option value="1">UPPERCASE</option>
+  <option value="2">lowercase</option>
+  
+
+</select>
+
+
+
 <label for="shortcuts">shortcuts:</label>
 
 <select name="shortcuts" id="shortcuts" onchange="onShortcutsChange()">
@@ -124,6 +138,8 @@ Your browser does not support the audio element.
 
 <script type="text/javascript">
 
+
+
  var total_trials = 0;
  var total_correct = 0;
 
@@ -132,8 +148,14 @@ Your browser does not support the audio element.
   var question_mark_link = "https://www.seekpng.com/png/detail/16-164942_bold-purple-question-mark-clipart-question-mark-clipart.png";
   var wrong_answer_link = "https://img.rawpixel.com/s3fs-private/rawpixel_images/website_content/pf-icon-2912-chim-l.jpg?auto=format&bg=F4F4F3&con=3&cs=srgb&dpr=1&fm=jpg&ixlib=php-3.1.0&mark=rawpixel-watermark.png&markalpha=90&markpad=13&markscale=10&markx=25&q=75&usm=15&vib=3&w=1200&s=2fbfa6423d604ca5a9be4190547c1336";
 
-  var letter_img_link = "https://www.freebiefindingmom.com/wp-content/uploads/2021/01/free-printable-colorful-cartoon-letters-cartoon-letter-"
-  var letter_img_ext = ".jpg"
+  var letter_img_link = "https://www.freebiefindingmom.com/wp-content/uploads/2021/01/free-printable-colorful-cartoon-letters-cartoon-letter-";
+  var letter_img_ext = ".jpg";
+
+  var letter_lower_link = "https://woojr.com/wp-content/uploads/2018/11/cartoon-letters-";
+  var letter_lower_ext = "-lowercase.jpg";
+  var letter_upper_link = "https://woojr.com/wp-content/uploads/2018/11/cartoon-letters-";
+  var letter_upper_ext = "-uppercase.jpg";
+  var letter_case = 1;
 
 
   var mode = document.getElementById("mode").value;
@@ -223,7 +245,19 @@ Your browser does not support the audio element.
       var correct_chr = characters[idx-1];
 
       // 
-      var src = letter_img_link + chr.toUpperCase() + letter_img_ext;
+      //var src = letter_img_link + chr.toUpperCase() + letter_img_ext;
+
+
+
+      var src = letter_upper_link + chr.toLowerCase() + letter_upper_ext;
+
+      if(chr=='A'){
+        src = letter_upper_link + chr.toUpperCase() + letter_upper_ext;
+      }
+      if (letter_case==2) {
+        src = letter_lower_link + chr.toLowerCase() + letter_lower_ext;
+      }
+
       var id = "#letter" + (idx);
       $(id).attr('src',src);
 
@@ -323,8 +357,10 @@ Your browser does not support the audio element.
   audio.load();
 
   // 
+  //word = "grade";
   var letters = word.split('');
   characters = letters;
+  //console.log(characters);
   
   var n = letters.length;
   $("#spell_div").html('');
@@ -343,7 +379,16 @@ Your browser does not support the audio element.
   var spell_div = document.getElementById("spell_div");
   for(var i=0; i<n;i++){
     var letter = letters[i];
-    var src = letter_img_link + letter.toUpperCase() + letter_img_ext;
+    //var src = letter_img_link + letter.toUpperCase() + letter_img_ext;
+    var src = letter_upper_link + letter.toLowerCase() + letter_upper_ext;
+
+    if(letter=='A' || letter=='a'){
+        src = letter_upper_link + letter.toUpperCase() + letter_upper_ext;
+        //console.log(src);
+      }
+    if (letter_case==2) {
+      src = letter_lower_link + letter.toLowerCase() + letter_lower_ext;
+    }
     if(indice.includes(i+1)){
       //console.log(indice);
       //console.log(i+1);
@@ -421,6 +466,12 @@ Your browser does not support the audio element.
   }
 
   return array;
+}
+
+function onCaseChange(){
+
+  console.log(letter_case);
+  if (letter_case==1) {letter_case=2;} else {letter_case=1;}
 }
 
 
