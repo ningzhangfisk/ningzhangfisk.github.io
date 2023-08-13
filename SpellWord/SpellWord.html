@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html>
+<body>
+<script src=
+        "https://d3js.org/d3.v7.min.js">
+    </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+
+
+<label for="grade">Choose a grade:</label>
+
+<select name="grade" id="grade" onchange="onGradeChange()">
+  
+  <option value="k">Kindergarten</option>
+  <option value="1">Grade 1</option>
+  <option value="2">Grade 2</option>
+  <option value="3">Grade 3</option>
+  <option value="4">Grade 4</option>
+  <option value="5">Grade 5</option>
+  <option value="6">Grade 6</option>
+</select>
+
+<br>
+
+<label for="mode">Choose a mode:</label>
+
+<select name="mode" id="mode" onchange="onModeChange()">
+  
+  <option value="1">Random with Replacement</option>
+  <option value="2">Random with no Replacement</option>
+  <option value="3">From First to Last</option>
+  <option value="4">From Random to Random-1</option>
+
+</select>
+
+
+<br>
+
+<label for="missing">Choose # of missing characters:</label>
+
+<select name="missing" id="missing" onchange="onMissingChange()">
+  
+  <option value="1">1</option>
+  <option value="2">2</option>
+  <option value="3">3</option>
+  <option value="4">4</option>
+  <option value="5">1/3</option>
+  <option value="6">1/2</option>
+  <option value="7">2/3</option>
+  <option value="8">3/4</option>
+
+</select>
+
+
+<br>
+
+<audio controls id="dict_audio">
+  
+  <source id="dict_src" src="https://dict.youdao.com/dictvoice?type=0&audio=apple" type="audio/mpeg">
+Your browser does not support the audio element.
+</audio>
+
+<br>
+
+
+<audio controls id="correct_audio" hidden>
+  
+  <source id="correct_src" src="https://github.com/ningzhangfisk/ningzhangfisk.github.io/blob/main/SpellWord/correct.mp3?raw=true" type="audio/mpeg">
+Your browser does not support the audio element.
+</audio>
+
+<audio controls id="wrong_audio" hidden>
+  
+  <source id="correct_src" src="https://github.com/ningzhangfisk/ningzhangfisk.github.io/blob/main/SpellWord/wrong.mp3?raw=true" type="audio/mpeg">
+Your browser does not support the audio element.
+</audio>
+
+<br>
+
+
+
+<p id="words" hidden>0</p>
+
+
+<ul id="word_list" hidden>
+  
+</ul>
+
+<ul id="url_list" hidden>
+  
+</ul>
+
+<center>
+  
+
+<img id="bg_img" src="https://i.ytimg.com/vi/6TWCcqmHn6g/maxresdefault.jpg" width="800px" height="400px"> <br><br><br><br>
+
+<div id="spell_div"
+
+></div>
+
+
+</center>
+
+
+<script type="text/javascript">
+
+ 
+
+
+
+  var question_mark_link = "https://www.seekpng.com/png/detail/16-164942_bold-purple-question-mark-clipart-question-mark-clipart.png";
+  var wrong_answer_link = "https://img.rawpixel.com/s3fs-private/rawpixel_images/website_content/pf-icon-2912-chim-l.jpg?auto=format&bg=F4F4F3&con=3&cs=srgb&dpr=1&fm=jpg&ixlib=php-3.1.0&mark=rawpixel-watermark.png&markalpha=90&markpad=13&markscale=10&markx=25&q=75&usm=15&vib=3&w=1200&s=2fbfa6423d604ca5a9be4190547c1336";
+
+  var letter_img_link = "https://www.freebiefindingmom.com/wp-content/uploads/2021/01/free-printable-colorful-cartoon-letters-cartoon-letter-"
+  var letter_img_ext = ".jpg"
+
+
+  var mode = document.getElementById("mode").value;
+  var prev = 0;
+  var word_order = [];
+  var missing = 1;
+
+  var missing_indice = [];
+  var characters = [];
+  var pausing_now = false;
+
+  $('#grade')
+    .val('k')
+    .trigger('change');
+
+  function onGradeChange(){
+
+    $("#word_list").html('');
+    $("#url_list").html('');
+    $("#words").html(0);
+
+    var x = document.getElementById("grade").value;
+    
+   
+
+    var file_link = "https://raw.githubusercontent.com/ningzhangfisk/ningzhangfisk.github.io/main/SpellWord/"+x+".csv";
+        d3.csv(file_link,
+            function(d){
+              return { idx : d.idx, word : d.word, url: d.url }
+            }).then(
+              function(data){
+                  //console.log(data);
+                
+                  var ul = document.getElementById("word_list");
+
+                  for (var i = 0; i <= data.length - 1; i++) {
+                    var id = 'word' + data[i]['idx'];
+                    var li = document.createElement("li");
+                    li.appendChild(document.createTextNode(data[i]['word']));
+                    li.setAttribute("id", id); // added line
+                    ul.appendChild(li);
+
+                  }
+
+
+                  ul = document.getElementById("url_list");
+
+                  for (var i = 0; i <= data.length - 1; i++) {
+                    var id = 'url' + data[i]['idx'];
+                    var li = document.createElement("li");
+                    li.appendChild(document.createTextNode(data[i]['url']));
+                    li.setAttribute("id", id); // added line
+                    ul.appendChild(li);
+
+                  }
+                
+
+
+                  document.getElementById("words").innerHTML = data.length;
+              });
+
+   
+      
+
+  }
+
+  $('body').on('keyup', function(event){
+
+    if(pausing_now) {return};
+    
+
+    
+
+    if((event.keyCode>=65 && event.keyCode<=90)){
+      var chr = String.fromCharCode(event.keyCode).toLowerCase();
+      //missing_indice = [];
+     //characters = [];
+      if(missing_indice.length==0){return;}
+
+
+      var idx = missing_indice[0];
+      
+      var correct_chr = characters[idx-1];
+
+      // 
+      var src = letter_img_link + chr.toUpperCase() + letter_img_ext;
+      var id = "#letter" + (idx);
+      $(id).attr('src',src);
+
+
+
+      if(chr == correct_chr){
+
+        missing_indice.shift();
+        var audio = document.getElementById('correct_audio');
+        audio.play();
+
+      }else{
+
+        //$('body').off('keyup');
+        pausing_now = true;
+
+        setTimeout(function (){
+  
+        // Something you want delayed.
+          var src = wrong_answer_link;
+        $(id).attr('src',src);
+        //return;
+
+        //$('body').on('keyup');
+        pausing_now = false;
+        var audio = document.getElementById('wrong_audio');
+        audio.play();
+            
+      }, 500); // How long you want the delay to be, measured in milliseconds.
+
+        
+
+      }
+
+      
+
+        
+
+    }
+
+
+    if(event.keyCode == 32){ // 32 => space key => change to a new word
+        missing_indice = [];
+        characters = [];
+        
+        var idx = -1;
+        var length = document.getElementById("words").innerHTML;
+        if(mode == 1){
+          
+          // Returns a random integer from 1 to length:
+          idx = Math.floor(Math.random() * length) + 1;
+          
+        }else{
+          idx = word_order[prev];
+          prev++;
+          if(prev == length){
+            prev = 0;
+            var val = 
+            $('#mode')
+              .val(mode)
+            .trigger('change');
+            }
+        }
+        id = "word"+idx;
+        var word = document.getElementById(id).innerHTML;
+        //console.log(word);
+
+        // get audio
+        var src="https://dict.youdao.com/dictvoice?type=0&audio="+word; 
+
+        var audio = document.getElementById('dict_audio');
+
+  
+  $('#dict_src').attr( 'src',src);
+
+  audio.load();
+
+  // get image
+  id = "url"+idx;
+  var url = document.getElementById(id).innerHTML;
+  $('#bg_img').attr( 'src',url);
+
+  // 
+  var letters = word.split('');
+  characters = letters;
+  
+  var n = letters.length;
+  $("#spell_div").html('');
+
+  //console.log(missing);
+
+  var indice = Array.from({length: n}, (_, i) => i + 1); // generate 1->length
+  
+  indice = shuffle(indice);
+  indice = indice.slice(0, missing).sort();
+  //console.log(indice);
+  missing_indice = indice;
+    
+
+
+  var spell_div = document.getElementById("spell_div");
+  for(var i=0; i<n;i++){
+    var letter = letters[i];
+    var src = letter_img_link + letter.toUpperCase() + letter_img_ext;
+    if(indice.includes(i+1)){
+      //console.log(indice);
+      //console.log(i+1);
+      src = question_mark_link;
+    }
+    //console.log(src);
+    var id = "letter" + (i+1);
+    var img = document.createElement("img");
+                    
+                    img.setAttribute("id", id);
+                    img.setAttribute("width", 150); 
+                    img.setAttribute("height", 150);  
+                    img.setAttribute("src", src);
+                    spell_div.appendChild(img);
+
+
+  }
+  
+
+
+    
+    }
+
+    if(event.keyCode==13){// return key to play the audio
+      //
+      var audio = document.getElementById('dict_audio');
+        audio.play();
+    }
+ });
+
+
+  function onModeChange(){
+      mode = document.getElementById("mode").value;
+      var n = document.getElementById("words").innerHTML;
+      if(mode!=1){
+        word_order = Array.from({length: n}, (_, i) => i + 1); // generate 1->length
+        if(mode==2){
+          word_order = shuffle(word_order);
+        }
+        if(mode==4){
+          var length = document.getElementById("words").innerHTML;
+          var pos = Math.floor(Math.random() * length);
+          //console.log(pos);
+          //word_order.unshift(...word_order.splice(-pos));
+          //word_order.unshift.apply(word_order, word_order.splice(3,2));
+         //word_order.push.apply(word_order, word_order.splice(0,pos));
+          word_order = word_order.concat(word_order.splice(0,pos));
+        }
+      }
+
+      //console.log(word_order);
+  
+    
+  }
+
+  function onMissingChange(){
+    missing = document.getElementById("missing").value;
+    //console.log(missing);
+  }
+
+
+  function shuffle(array) {
+  let currentIndex = array.length,  randomIndex;
+
+  // While there remain elements to shuffle.
+  while (currentIndex != 0) {
+
+    // Pick a remaining element.
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex--;
+
+    // And swap it with the current element.
+    [array[currentIndex], array[randomIndex]] = [
+      array[randomIndex], array[currentIndex]];
+  }
+
+  return array;
+}
+
+
+function shiftArrayToRight(arr, places) {
+    for (let i = 0; i < places; i++) {
+        arr.unshift(arr.pop());
+    }
+}
+
+
+
+</script>
+
+</body>
+</html>
