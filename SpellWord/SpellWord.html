@@ -132,7 +132,7 @@ Your browser does not support the audio element.
 </center>
 
 <center>
-  <p hidden style="color:blue; font-size: 50px;" id="stats">Total: 0 | Correct: 0 | Accuracy: 0%</p>
+  <p  style="color:blue; font-size: 50px;" id="stats">Total: 0 | Correct: 0 | Accuracy: 0% | Help: 0</p>
 </center>
 
 
@@ -142,6 +142,8 @@ Your browser does not support the audio element.
 
  var total_trials = 0;
  var total_correct = 0;
+ var total_help = 0;
+ 
 
 
 
@@ -225,20 +227,39 @@ Your browser does not support the audio element.
   $('body').on('keyup', function(event){
     //console.log(event.keyCode);
 
+
     if(pausing_now) {return};
     
 
-    
+    if(event.keyCode==17){ // ctrl -> show correct character
 
-    if((event.keyCode>=65 && event.keyCode<=90)){
-
-      total_trials += 1;
-
-      var chr = String.fromCharCode(event.keyCode).toLowerCase();
-      //missing_indice = [];
-     //characters = [];
       if(missing_indice.length==0){return;}
 
+
+
+      
+      $(function() {
+        var e = $.Event('keyup');
+        var idx = missing_indice[0];
+        var correct_chr = characters[idx-1].toUpperCase().charCodeAt(0);
+        //console.log(correct_chr);
+        e.which = correct_chr; // Character 'A'
+        e.keyCode = correct_chr;
+        e.ctrlKey = true;
+        $('body').trigger(e);
+        });
+
+    }
+
+    if((event.keyCode>=65 && event.keyCode<=90)){
+      //console.log(event);
+
+      if(missing_indice.length==0){return;}
+
+      var chr = String.fromCharCode(event.keyCode).toLowerCase();
+      
+
+      total_trials += 1;
 
       var idx = missing_indice[0];
       
@@ -268,6 +289,12 @@ Your browser does not support the audio element.
         
 
         pausing_now = true;
+        if(event.ctrlKey){
+          total_help += 1;
+        }
+
+          total_correct += 1;
+        
 
         setTimeout(function (){
   
@@ -275,7 +302,7 @@ Your browser does not support the audio element.
          missing_indice.shift();
         var audio = document.getElementById('correct_audio');
         audio.play();
-        total_correct += 1;
+        
         pausing_now = false;
             
       }, 250); // How long you want the delay to be, measured in milliseconds.
@@ -305,10 +332,10 @@ Your browser does not support the audio element.
       }
 
       // statistics
+      // console.log(total_trials);
+      //console.log(total_correct);
 
-      
-
-      var stats = "Total: " + total_trials + " | Correct: " + total_correct + " | Accuracy: " + ((total_correct/total_trials)*100| 0) + "%";
+      var stats = "Total: " + total_trials + " | Correct: " + total_correct + " | Accuracy: " + ((total_correct/total_trials)*100| 0) + "%" + " | Help: " + total_help;
       document.getElementById("stats").innerHTML = stats;
 
       
@@ -517,6 +544,8 @@ function shiftArrayToRight(arr, places) {
         arr.unshift(arr.pop());
     }
 }
+
+
 
 
 
