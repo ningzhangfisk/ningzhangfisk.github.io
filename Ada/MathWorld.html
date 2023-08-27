@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html>
+<body>
+<script src=
+        "https://d3js.org/d3.v7.min.js">
+    </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+
+
+<label for="level">Level:</label>
+
+<select name="level" id="level" onchange="onLevelChange()">
+  
+  <option value="1" selected="selected">0~10</option>
+  <option value="2">0~20</option>
+  <option value="3">0~50</option>
+  <option value="4">0~100</option>
+</select>
+
+
+
+<label for="arithmatic">Arithmatic:</label>
+
+<select name="arithmatic" id="arithmatic" onchange="onArithmaticChange()">
+  
+  <option value="1" selected="selected">+</option>
+  <option value="2">-</option>
+  <option value="3">+ -</option>
+  <option value="4">*</option>
+  <option value="5">/</option>
+  <option value="6">* /</option>
+  <option value="7">+ - * /</option>
+
+</select>
+
+
+
+
+<label for="sign">Negative Allowed:</label>
+
+<select name="sign" id="sign" onchange="onSignChange()">
+  
+  <option value="1" selected="selected">No</option>
+  <option value="2" >Yes</option>
+  
+
+</select>
+
+
+
+
+
+<label for="shortcuts">Shortcuts:</label>
+
+<select name="shortcuts" id="shortcuts" onchange="onShortcutsChange()">
+  <option value="1">space -> start/next question</option>
+  <option value="2">return -> pronounce word</option>
+  <option value="3">shift -> show/hide accuracy</option>
+ 
+<option value="4">Ctrl -> help add correct character</option>
+</select>
+
+
+<br><br><br><br>
+
+
+
+<audio controls id="dict_audio" hidden>
+  
+  <source id="dict_src" src="https://dict.youdao.com/dictvoice?type=0&audio=abandon" type="audio/mpeg">
+Your browser does not support the audio element.
+</audio>
+
+
+
+<audio controls id="correct_audio" hidden>
+  
+  <source id="correct_src" src="https://github.com/ningzhangfisk/ningzhangfisk.github.io/blob/main/Ada/correct.mp3?raw=true" type="audio/mpeg">
+Your browser does not support the audio element.
+</audio>
+
+<audio controls id="wrong_audio" hidden>
+  
+  <source id="correct_src" src="https://github.com/ningzhangfisk/ningzhangfisk.github.io/blob/main/Ada/wrong.mp3?raw=true" type="audio/mpeg">
+Your browser does not support the audio element.
+</audio>
+
+
+
+
+<p id="words" hidden>0</p>
+
+
+<ul id="word_list" hidden>
+  
+</ul>
+
+<ul id="url_list" hidden>
+  
+</ul>
+
+<center>
+  
+
+<img id="bg_img" src="https://img.freepik.com/free-vector/number-0-9-with-math-symbols_1308-101123.jpg?w=2000" width="800px" height="400px"> <br><br><br><br>
+
+<div id="spell_div"
+
+>
+  
+<p style="color:red; font-size: 60px;">Ada, welcome to your MathWorld!</p>
+
+</div>
+
+
+</center>
+
+<center>
+  <p  hidden style="color:blue; font-size: 50px;" id="stats">Total: 0 | Correct: 0 | Accuracy: 0% | Help: 0</p>
+</center>
+
+
+<script type="text/javascript">
+
+
+
+ var total_trials = 0;
+ var total_correct = 0;
+ var total_help = 0;
+ 
+
+
+
+  var question_mark_link = "https://www.seekpng.com/png/detail/16-164942_bold-purple-question-mark-clipart-question-mark-clipart.png";
+  var wrong_answer_link = "https://img.rawpixel.com/s3fs-private/rawpixel_images/website_content/pf-icon-2912-chim-l.jpg?auto=format&bg=F4F4F3&con=3&cs=srgb&dpr=1&fm=jpg&ixlib=php-3.1.0&mark=rawpixel-watermark.png&markalpha=90&markpad=13&markscale=10&markx=25&q=75&usm=15&vib=3&w=1200&s=2fbfa6423d604ca5a9be4190547c1336";
+
+  var digit_img_link = "https://www.woojr.com/wp-content/uploads/2018/11/cartoon-letters-";
+  var digit_img_ext = ".jpg";
+
+  var plus_img_link = "https://cdn.imgbin.com/11/6/22/imgbin-illustration-addition-graphics-addition-K1g0avXuP5gFJCVMVER5nm5hp.jpg";
+  var minus_img_link = "https://www.clipartmax.com/png/middle/455-4558065_addition-subtraction-clipart.png";
+  var equals_img_link="https://www.nicepng.com/png/detail/45-454035_cartoon-equals-sign-clip-art-image-math-equal.png";
+  var times_img_link = "https://content.mycutegraphics.com/graphics/math/math-multiplication-sign.png";
+  var dividedby_img_link ="https://clipart-library.com/2023/764-7640476_short-division-with-a-single-digit-divisor-clipart.png";
+
+
+  
+
+
+  var level = document.getElementById("level").value;
+  var arithmatic = document.getElementById("arithmatic").value;
+  var sign = document.getElementById("sign").value;
+
+
+  var prev = 0;
+  var word_order = [];
+  var missing = 1;
+
+  var missing_indice = [];
+  var characters = [];
+  var pausing_now = false;
+
+  var correct_ans_length = 0;
+  var correct_ans = 0;
+  var user_ans = [];
+  var equation = "";
+  var correct_equation="";
+
+  $('#grade')
+    .val('k')
+    .trigger('change');
+
+  function onGradeChange(){
+
+    $("#word_list").html('');
+    $("#url_list").html('');
+    $("#words").html(0);
+
+    var x = document.getElementById("grade").value;
+    
+   
+
+    var file_link = "https://raw.githubusercontent.com/ningzhangfisk/ningzhangfisk.github.io/main/SpellWord/"+x+".csv";
+        d3.csv(file_link,
+            function(d){
+              return { idx : d.idx, word : d.word, url: d.url }
+            }).then(
+              function(data){
+                  //console.log(data);
+                
+                  var ul = document.getElementById("word_list");
+
+                  for (var i = 0; i <= data.length - 1; i++) {
+                    var id = 'word' + data[i]['idx'];
+                    var li = document.createElement("li");
+                    li.appendChild(document.createTextNode(data[i]['word']));
+                    li.setAttribute("id", id); // added line
+                    ul.appendChild(li);
+
+                  }
+
+
+                  ul = document.getElementById("url_list");
+
+                  for (var i = 0; i <= data.length - 1; i++) {
+                    var id = 'url' + data[i]['idx'];
+                    var li = document.createElement("li");
+                    li.appendChild(document.createTextNode(data[i]['url']));
+                    li.setAttribute("id", id); // added line
+                    ul.appendChild(li);
+
+                  }
+                
+
+
+                  document.getElementById("words").innerHTML = data.length;
+              });
+
+   
+      
+
+  }
+
+  $('body').on('keyup', function(event){
+    //console.log(event.keyCode);
+
+
+    if(pausing_now) {return};
+    
+
+    if(event.keyCode==17){ // ctrl -> show correct character
+
+      if(missing_indice.length==0){return;}
+
+
+
+      
+      $(function() {
+        var e = $.Event('keyup');
+        var idx = missing_indice[0];
+      
+        var correct_digit = correct_equation[idx-1];
+
+        //console.log(correct_equation);
+        e.which = correct_digit; // Character 'A'
+        e.keyCode = Number(correct_digit) + 48;;
+        e.ctrlKey = true;
+        //console.log(e);
+        $('body').trigger(e);
+        });
+
+    }
+
+    if((event.keyCode>=48 && event.keyCode<=57)){ // characters 0~9
+      //console.log(event);
+
+      if(correct_ans_length==0){return;}
+
+      var digit = String.fromCharCode(event.keyCode);
+      
+
+      total_trials += 1;
+
+      var idx = missing_indice[0];
+      
+      var correct_digit = correct_equation[idx-1];
+
+      //console.log(correct_digit);
+
+      // 
+      //var src = letter_img_link + chr.toUpperCase() + letter_img_ext;
+
+
+
+      var src = digit_img_link + digit + digit_img_ext;
+
+      var id = "#letter" + (idx);
+      $(id).attr('src',src);
+
+
+
+      if(digit == correct_digit){
+
+        
+
+        pausing_now = true;
+        if(event.ctrlKey){
+          total_help += 1;
+        }
+
+          total_correct += 1;
+        
+
+        setTimeout(function (){
+  
+        // Something you want delayed.
+         missing_indice.shift();
+         //if(missing_indice.length==0){
+          var audio = document.getElementById('correct_audio');
+        audio.play();
+      //}
+        
+        pausing_now = false;
+            
+      }, 250); // How long you want the delay to be, measured in milliseconds.
+
+
+      }else{
+
+        //$('body').off('keyup');
+        pausing_now = true;
+
+        setTimeout(function (){
+  
+        // Something you want delayed.
+          var src = wrong_answer_link;
+        $(id).attr('src',src);
+        //return;
+
+        //$('body').on('keyup');
+        pausing_now = false;
+        var audio = document.getElementById('wrong_audio');
+        audio.play();
+            
+      }, 500); // How long you want the delay to be, measured in milliseconds.
+
+        
+
+      }
+
+      // statistics
+      // console.log(total_trials);
+      //console.log(total_correct);
+
+      var stats = "Total: " + total_trials + " | Correct: " + total_correct + " | Accuracy: " + ((total_correct/total_trials)*100| 0) + "%" + " | Help: " + total_help;
+      document.getElementById("stats").innerHTML = stats;
+
+      
+
+        
+
+    }
+
+    if(event.keyCode==16){ //shift to toggle stats
+      jQuery("#stats").toggle();
+
+    }
+
+
+
+    if(event.keyCode == 32){ // 32 => space key => a new question
+      // generate two operands
+     
+      if(level==1){
+        var max_number = 10;
+      }else if(level == 2){
+        var max_number = 20;
+      }else if(level == 50){
+        var max_number = 50;
+      }else{
+        var max_number = 100
+      }
+
+      var operand1 = Math.floor(Math.random() * max_number) + 1;
+      var operand2 = Math.floor(Math.random() * max_number) + 1;
+
+     // get operator
+      // 0,1,2,3 -> +,-,*,-
+    if(arithmatic == 1){
+      var operators = [0];
+    }else if(arithmatic==2){
+      var operators = [1];
+    }else if(arithmatic==3){
+      var operators = [0,1];
+    }
+    else if(arithmatic==4){
+      var operators = [2];
+    }
+    else if(arithmatic==5){
+      var operators = [3];
+    }
+    else if(arithmatic==6){
+      var operators = [2,3];
+    }
+    else {
+      var operators = [0,1,2,3];
+    }
+
+
+   var index = Math.floor(Math.random() * operators.length)
+   var operator_index = operators[index];
+
+   // check if negative is allowed
+
+   if(sign == 1 && operator_index==1){
+      if(operand1<operand2){
+        var tmp = operand2;
+        operand2 = operand1;
+        operand1 = tmp;
+      }
+   }
+
+   if(operator_index==0){
+    var operator_str = "plus";
+   }else if(operator_index==1){
+    var operator_str = "minus";
+   }else if(operator_index==2){
+    var operator_str = "times";
+   }else {
+    var operator_str = "divided%20by";
+   }
+
+
+  var audio_text = operand1.toString() + "%20" + operator_str + "%20" + operand2.toString()+ "%20" + "equals";
+
+  // get audio
+        var src="https://dict.youdao.com/dictvoice?type=0&audio="+audio_text; 
+
+        var audio = document.getElementById('dict_audio');
+
+  
+  $('#dict_src').attr( 'src',src);
+
+  audio.load();
+
+  // plot question
+
+  if(operator_index==0){
+     correct_ans = operand1 + operand2;
+   }else if(operator_index==1){
+     correct_ans = operand1 - operand2;
+   }else if(operator_index==2){
+     correct_ans = operand1 * operand2;
+   }else {
+     correct_ans = operand1 / operand2;
+   }
+
+  
+
+  var n1 = getNumberOfDigits(operand1);
+  var n2 = getNumberOfDigits(operand2);
+  var n3 = getNumberOfDigits(correct_ans);
+  correct_ans_length = n3;
+
+  var n = n1 + 1 + n2 + 1 + n3;
+  
+  
+  $("#spell_div").html('');
+
+var letters = operand1.toString();
+
+   if(operator_index==0){
+    letters = letters + "+";
+   }else if(operator_index==1){
+    letters = letters + "-";
+   }else if(operator_index==2){
+    letters = letters + "*";
+   }else {
+    letters = letters + "/";
+   }
+
+   letters = letters + operand2.toString();
+
+   letters = letters + "=";
+
+   correct_equation = letters;
+   correct_equation = correct_equation + correct_ans.toString();
+   for(var i=0; i<n3 ; i++){
+    letters = letters + "?";
+
+   }
+
+
+   equation = letters;
+
+
+  var spell_div = document.getElementById("spell_div");
+  for(var i=0; i<n;i++){
+    var letter = letters[i];
+
+    if(letter=="+"){
+      var src = plus_img_link;
+    }
+    else if(letter=="-"){
+      var src = minus_img_link;
+    }
+    else if(letter=="*"){
+      var src = times_img_link;
+    }
+    else if(letter=="/"){
+      var src = dividedby_img_link;
+    }
+    else if(letter=="="){
+      var src = equals_img_link;
+    }
+    else if(letter=="?"){
+      var src = question_mark_link;
+      missing_indice.push(i+1);
+    }else{
+      var src = digit_img_link + letter + digit_img_ext;
+    }
+    
+    //console.log(src);
+    var id = "letter" + (i+1);
+    var img = document.createElement("img");
+                    
+                    img.setAttribute("id", id);
+                    img.setAttribute("width", 150); 
+                    img.setAttribute("height", 150);  
+                    img.setAttribute("src", src);
+                    spell_div.appendChild(img);
+
+
+  }
+
+  audio.play();
+  user_ans = [];
+
+
+  
+
+
+    
+    }
+
+    if(event.keyCode==13){// return key to play the audio
+      //
+      var audio = document.getElementById('dict_audio');
+        audio.play();
+    }
+ });
+
+
+
+
+function onLevelChange(){
+  level = document.getElementById("level").value;
+}
+function onArithmaticChange(){
+  arithmatic = document.getElementById("arithmatic").value;
+}
+function onSignChange(){
+  sign = document.getElementById("sign").value;
+}
+function getNumberOfDigits(number) {
+  // get number of digits in an int
+    return number.toString().length;
+} 
+
+
+  function onModeChange(){
+      mode = document.getElementById("mode").value;
+      var n = document.getElementById("words").innerHTML;
+      if(mode!=1){
+        word_order = Array.from({length: n}, (_, i) => i + 1); // generate 1->length
+        if(mode==2){
+          word_order = shuffle(word_order);
+        }
+        if(mode==4){
+          var length = document.getElementById("words").innerHTML;
+          var pos = Math.floor(Math.random() * length);
+          //console.log(pos);
+          //word_order.unshift(...word_order.splice(-pos));
+          //word_order.unshift.apply(word_order, word_order.splice(3,2));
+         //word_order.push.apply(word_order, word_order.splice(0,pos));
+          word_order = word_order.concat(word_order.splice(0,pos));
+        }
+      }
+
+      //console.log(word_order);
+  
+    
+  }
+
+  function onMissingChange(){
+    missing = document.getElementById("missing").value;
+    //console.log(missing);
+  }
+
+
+  function shuffle(array) {
+  let currentIndex = array.length,  randomIndex;
+
+  // While there remain elements to shuffle.
+  while (currentIndex != 0) {
+
+    // Pick a remaining element.
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex--;
+
+    // And swap it with the current element.
+    [array[currentIndex], array[randomIndex]] = [
+      array[randomIndex], array[currentIndex]];
+  }
+
+  return array;
+}
+
+function onCaseChange(){
+
+  //console.log(letter_case);
+  if (letter_case==1) {letter_case=2;} else {letter_case=1;}
+}
+
+
+function shiftArrayToRight(arr, places) {
+    for (let i = 0; i < places; i++) {
+        arr.unshift(arr.pop());
+    }
+}
+
+
+
+
+
+</script>
+
+</body>
+</html>
