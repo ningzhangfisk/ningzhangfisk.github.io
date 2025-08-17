@@ -1,0 +1,813 @@
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+	<link rel="stylesheet" type="text/css" media="all" href="../../../inland.css">
+	<link rel="stylesheet" type="text/css" media="all" href="../../../thisclass.css">
+	<title>CSCI241-01/CSCI241L-01 - Fall 2024</title>
+</head>
+
+<body>
+<div id="wrapper960" class="clearfix"> <!-- entire body -->
+	<div id="toplinks">
+		<ul class="toplinks_links">
+			<li><a href="https://www.fisk.edu/">Fisk</a></li>
+			<li><a href="https://www.fisk.edu/academics/nsmb/department-of-mathematics-and-computer-science/">Mathematics and Computer Science</a></li>
+			<li><a href="https://www.fisk.edu/current-students/">Student LogIn</a></li>
+			<li><a href="https://www.fisk.edu/about/administration/division-of-student-affairs/">Student Affairs</a></li>
+			<li><a href="https://ningzhangfisk.github.io/">Dr. Ning Zhang</a></li>
+		</ul>
+	</div> <!-- End toplinks -->
+	
+	<div id="header" class="clearfix shadow"> <!-- Top stuff including header image -->
+		<div id="sitetitle" class="clearfix"> <!-- Site Title -->
+			<h1><a href="index.html">CSCI241-01/CSCI241L-01</a></h1>
+			<br>
+			Data Structures and Algorithms<br>
+			Fall 2024<br>
+            3(Lecture) + 1(Lab) Credits
+		</div> <!-- End Site Title -->
+
+		<div id="nav" class="clearfix"> <!-- nav -->
+			<ul>
+				<li><a href="https://edstem.org/us/courses/61956/lessons/">Home</a></li>
+				<li><a class="current" href="Syllabus.html">Syllabus</a></li>
+			</ul>
+		</div> <!--End nav -->
+		
+		<div id="extended"> <!-- Header Image -->
+			<img src="../../Resources/ds.png" style="width:600px;height:300px;">
+		</div> <!-- End Header Image -->
+		
+		<div id="extended" style="font-family: verdana,arial,sans-serif; color: #333333"> <!-- single word syllabus -->
+			<h1>Syllabus</h1>
+		</div> <!-- End single word "Syllabus" -->
+		
+	</div> <!-- End Top stuff including header image -->
+	
+	<div  id="extended" style="font-family: verdana,arial,sans-serif; color: #333333"> <!-- Main Points -->
+
+		
+		<h3>Dr. Ning Zhang</h3>
+		<p>319 Park Johnson Hall<br>
+			<a href="https://ningzhangfisk.github.io/">https://ningzhangfisk.github.io</a><br>
+			<a href="mailto:nzhang@fisk.edu?subject=CSCI%20110&amp;body=Dear%20Dr.%20Zhang,%0A%0A">nzhang@fisk.edu</a><br>
+		615-xxx-xxxx </p>
+				
+		<!------------------------------------------------------>
+		<h2>Office Hours</h2>
+		<p>
+			Please check <a href="../../../MySchedule/My Schedule Fall 2024.pdf">my schedule</a> . </br>
+			Feel free to stop by my office. </br>
+			You can also make an appointment to meet me at a specific time in my office or via Zoom.<br>
+
+		</p>	
+		<!-------------------------------------------------------------------
+        <p>
+            I am normally in my office Monday through Friday during the day. My door is always open. 
+            Please feel free to stop in any time. You can also make an appointment to meet with me at 
+            a specific time. Here are my official office hours:
+        </p>
+		
+		<p>
+            <table class="officeHours">
+            <tr>
+               <td class="officeHours"  style="padding-left:2em">Mon, Tue, Wed, Fri</td>
+               <td class="officeHours">9:00 &mdash; 12:00</td></tr>
+            <tr>
+              <td class="officeHours"  style="padding-left:2em;">Thu</td>
+              <td class="officeHours">3:30 &mdash; 5:30</td>
+            </tr>
+            </table>
+        </p>
+		----------------------------------------------------------------------->
+
+		<!------------------------------------------------------>
+		<h2>Course Description</h2>
+        <p>
+        This course continues the study of data structures and the design and analysis of algorithms. 
+		It will include an introduction to algorithm design techniques, including greedy algorithms and divide and conquer.<br>
+		This course extends the material from CSCI 120, and provides in-depth analysis and usage of various data structures, including vectors and multidimensional arrays, ADTs (Abstract Data Types), singly- and doubly-linked lists, stacks, queues, trees, and graphs.  Algorithms to manipulate these data structures are presented and analyzed for complexity.  Other algorithms,
+		specifically including searching and sorting, are presented and analyzed for complexity.  Students will develop programs to implement and manipulate these data structures and algorithms.
+	</p>
+			
+        	
+		<!------------------------------------------------------>
+		<h2>Objectives</h2>
+		<p>Upon completion of this course students will be able to:</p>
+        <ul style="padding-left:4em">
+    		<li>Implement and use various data structures in problem solving, including, but not necessarily limited to Arrays, Lists, both single- and double-linked, Stacks (LIFO), Queues (FIFO), Trees, Graphs, and Hash Tables</li>
+    		<li>Implement data structures using programming language such as Java.</li>
+    		<li>Apply algorithms applicable to the manipulation of these various data structures, including searching, sorting, tree and graph traversal, and the application of recursion.</li>
+    		<li>Analyze algorithms for space and time complexity (Order notation).</li>
+		<li>Solve problems for general categories such as greedy algorithms and divide-and-conquer.</li>
+		<li>Apply classes of algorithms (P, NP, and NP-Complete).</li>
+
+	</ul>
+		
+		<!------------------------------------------------------>
+	
+		<h2>Student Learning Outcome</h2>
+            <p>Upon successful completion of this course the student will have demonstrated the ability to:
+		<table>
+<thead>
+  <tr>
+	  <td style="background-color:lightgrey"><b>Student Learning Outcomes</b></td>
+    <td style="background-color:lightgrey"><b>Activities to Achieve Outcomes</b></td>
+    <td style="background-color:lightgrey"><b>Assessment Methods</b></td>
+  </tr>
+</thead>
+<tbody>
+  <tr>
+    <td>Demonstrate proficiency and the ability to use critical thinking skills in applying data structures to various problem-solving algorithms</td>
+    <td>
+	    <ul>
+		    <li>Classroom demonstration / lecture notes</li>
+		    <li>Homework assignments</li>
+		    <li>In-class Discussion</li>
+	    </ul>
+    </td>
+    <td>
+	    <ul>
+		    <li>Quizzes</li>
+		    <li>Homework exercises</li>
+		    <li>Midterm examination</li>
+		    <li>Final examination</li>
+	    </ul>
+	  </td>
+  </tr>
+  <tr>
+    <td>Demonstrate the ability to implement data structures and the code with which to manipulate them.</td>
+    <td><ul>
+		    <li>Classroom demonstration / lecture notes</li>
+		    <li>Homework assignments</li>
+		    <li>In-class Discussion</li>
+	    </ul></td>
+    <td><ul>
+		    
+		    <li>Homework assginments</li>
+	    <li>Quizzes</li>
+		    <li>Examinations</li>
+
+	    </ul></td>
+  </tr>
+  <tr>
+    <td>Demonstrate the ability to analyze algorithms in terms of both time and spatial complexity.</td>
+    <td><ul>
+		    <li>Classroom demonstration / lecture notes</li>
+		    <li>Homework assignments</li>
+		 
+	    </ul></td>
+    <td><ul>
+		    
+		    <li>Homework assginments</li>
+	    <li>Quizzes</li>
+		    <li>Examinations</li>
+
+	    </ul></td>
+  </tr>
+</tbody>
+</table>
+     </p>
+		
+		
+		<!------------------------------------------------------>
+		<h2>Prerequisites</h2>
+        <p>CSCI 120 and Math 115</p>
+
+		<!------------------------------------------------------>
+		<h2>Schedule</h2>
+		<p>The class meets on Tuesday and Thursday from 10:00 AM to 11:20 AM in
+			room LIBR322. There will be no class on the following days:
+		</p>
+		<ul style="padding-left:4em">
+			
+			<li>Tuesday, Oct 8(Fall Break)</li>
+			<li>Thursday, Nov 26(Thanksgiving Recess)</li>
+			<li>Friday, Nov 28(Thanksgiving Recess)</li>
+		</ul>
+	
+		<p>For other important dates, please check the <a href="https://www.fisk.edu/academics/academic-calendar/">academic calendar</a></p>
+		
+		<!----------------->
+		
+		<!------------------------------------------------------>
+		<h2>Textbook</h2>
+		
+		<h3>Introduction to Java Programming and Data Structures, 12th edition</h3>
+		<table>
+			<tbody>
+				<tr>
+					<td class="noBorders" style="vertical-align:top">Y. Daniel Liang <br>
+						
+						ISBN-13: 978-0136520238 </br>
+				ISBN-10: 0136520235 </br>
+					<a href="https://www.amazon.com/Introduction-Programming-Structures-Comprehensive-Version/dp/0136520235/ref=sr_1_4?dchild=1&keywords=Introduction+to+Java+Programming+and+Data+Structures&qid=1595819844&s=books&sr=1-4">Amazon Comprehensive Version<a/></br>
+<a href="https://www.amazon.com/Y-Daniel-Liang/dp/0136520154/ref=pd_sbs_14_1/134-7511227-5859366?_encoding=UTF8&pd_rd_i=0136520154&pd_rd_r=82e161be-0ed0-4059-8022-62e6491ca4f4&pd_rd_w=0UYHt&pd_rd_wg=C5YgB&pf_rd_p=bc074051-81d1-4874-a3fd-fd0c867ce3b4&pf_rd_r=V3VSEW44M0J4B7YKCES5&psc=1&refRID=V3VSEW44M0J4B7YKCES5">Amazon Loose Leaf Edition<a/>						
+						</td> 
+					<td class="noBorders" ><img style="margin-left:30px;" src="https://images-na.ssl-images-amazon.com/images/I/51lkHc6Hl1L._SX396_BO1,204,203,200_.jpg" width="100"></td>
+				</tr>
+			</tbody>
+		</table>
+		
+	
+		
+			
+
+	
+		<!------------------------------------------------------>
+		<h2>Class Web Site &amp; Canvas</h2>
+		<p>The Edstem system 
+            (<a href="https://edstem.org/us/courses/61956/lessons/">https://edstem.org/us/courses/61956/lessons/</a>)
+			will be used for this class.
+		</p>
+		
+		<!------------------------------------------------------>
+		<h2>Communicating with Me</h2>
+		<p>You are welcome to ask me questions by e-mail. I will try to answer
+			your e-mails within 24 hours from the time they are received. You
+			should make sure to include "CSCI241-01" in the subject line to help me
+			get to your e-mail quickly. I will occasionally send e-mail
+			announcements to all students in the class and you are responsible for
+			all official correspondence sent to your Fisk address
+			(@fisk.edu). Make sure that you check this e-mail account regularly. I
+			would also prefer receiving e-mails from your Fisk account, rather than
+			from commercial e-mail providers such as hotmail, gmail etc. I will
+			try to call you by your preferred name. As a matter of
+			professionalism, I’d prefer you call me "Prof. Zhang" or "Dr.
+			Zhang". I will insist that we all start our e-mails with the
+			recipient’s name (not "Hey" or just blank) and end our e-mails with
+			the sender's name.
+		</p>
+		
+		<!------------------------------------------------------>
+    <h2>How Your Grade is Determined</h2>
+    <p>Your grade for this class is determined by the following:
+    
+
+    <table class="noBorders">
+	
+    <tr>
+      <td class="noBorders">Homework</td>
+      <td style="text-align: right" class="noBorders">30%</td></tr>
+    <tr>
+      <td class="noBorders">Lab</td>
+      <td style="text-align: right" class="noBorders">15%</td></tr>
+      
+	    <tr>
+       <td class="noBorders">Quizzes</td>
+       <td style="text-align: right" class="noBorders">15%</td></tr>
+    <tr>
+      <td class="noBorders">Midterm Exam</td>
+      <td style="text-align: right" class="noBorders">15%</td></tr>
+    <tr>
+       <td class="noBorders">Final Exam</td>
+       <td style="text-align: right" class="noBorders">25%</td></tr>
+    
+    </table>
+
+    </p>
+   
+    <p><b>Attendance</b> Attendance in class is strictly required by university policy, unless permitted by the instructor in advance. You are expected to attend all classes and to arrive on time. I will take attendance most days, but not every day.<br>
+	<b>Fisk’s Attendance Policy Statement: </b>“Attendance in class is strictly required by University policy. In each course, students who miss more than ten percent of the scheduled class meetings (including labs) due to unexcused absences will be in danger of failing the course. For a class that meets three times per week, the number of unexcused absences would be five class sessions; for a class that meets twice a week, three class sessions; and for a class that meets once per week, two class sessions.”
+</p>
+
+	
+    <p><b>Homework Assignments</b> Each assignment will be given a date and a time when the assignment is due. 
+	    You are expected to complete all assignments on time, <b>late submissions will be penalized by 10% (less than 24 hours) and 15% per day if submitted after 24 hours. Start early, and don’t wait until the last minute!</b> 
+    </p>
+
+<p><b>Labs</b> Each lab will be given a date and a time when the lab is due. 
+	    You are expected to complete all labs on time, <b>late submissions will be penalized by 10% (less than 24 hours) and 15% per day if submitted after 24 hours. Start early, and don’t wait until the last minute!</b> 
+    </p>
+    <p><b>Quizzes</b> There will be several quizzes throughout the semester. Each quiz will be announced in advance. The lowest quiz will be dropped when computing your final grade for the class. Quizzes are closed book and closed notes.  No electronic devices may be used. All personal electronic devices must be stored under your seat during the quizzes. This includes calculators, cell phones, watches, and all other electronic devices. Lab computers may not be used on the quizzes. You will get 0 points if you use any electronic devices.</p>
+    
+    <p><b>Midterm Exam</b> The midterm exam will be on Thursday, Oct 5. This will be a closed book and closed notes exam. No electronic devices may be used. All personal electronic devices must be stored under your seat during the exam. This includes calculators, cell phones, watches, and all other electronic devices. Lab computers may not be used on the exam. You will get 0 points if you use any electronic devices.</p>
+    
+    <p><b>Final Exam</b> The final exam will be on to-be-updated (<a href="https://www.fisk.edu/wp-content/uploads/2022/03/FINAL-EXAMINATION-SCHEDULE-FALL-2023.pdf">double check here</a>). The final exam will comprehensive and will include all topics covered during the semester. This will be a closed book and closed notes exam. No electronic devices may be used. All personal electronic devices must be stored under your seat during the exam. This includes calculators, cell phones, watches, and all other electronic devices. Lab computers may not be used on the exam. You will get 0 points if you use any electronic devices.</p>
+    
+    
+   
+    
+    
+     <p>Letter grades will be assigned based on the following:
+		<table class="withBorders" style="margin-left:4em">
+			<tr>
+				<td class="withBorders" style="border-width: medium thin thin medium; vertical-align:bottom; width:5em; background-color:lightgrey">Grade</td>
+				<td class="withBorders" style="border-width: medium medium thin thin; width:5em; background-color:lightgrey">Score Range</td>
+				<td class="withBorders" style="border-width: medium thin thin medium; vertical-align:bottom; width:5em; background-color:lightgrey">Grade</td>
+				<td class="withBorders" style="border-width: medium medium thin thin; width:5em; background-color:lightgrey">Score Range</td>
+				<td class="withBorders" style="border-width: medium thin thin medium; vertical-align:bottom; width:5em; background-color:lightgrey">Grade</td>
+				<td class="withBorders" style="border-width: medium medium thin thin;width:5em; background-color:lightgrey">Score Range</td>
+				<td class="withBorders" style="border-width: medium thin thin medium; vertical-align:bottom; width:5em; background-color:lightgrey">Grade</td>
+				<td class="withBorders" style="border-width: medium medium thin thin; width:5em; background-color:lightgrey">Score Range</td>
+				<td class="withBorders" style="border-width: medium thin thin medium; vertical-align:bottom; width:5em; background-color:lightgrey">Grade</td>
+				<td class="withBorders" style="border-width: medium medium thin thin; width:5em; background-color:lightgrey">Score Range</td>
+			</tr>
+
+			<tr>
+				
+				<td class="withBorders" style="border-width: thin thin thin medium">A</td>
+				<td class="withBorders">[90,100]</td>
+				<td class="withBorders" style="border-width: thin thin thin medium">B+</td>
+				<td class="withBorders">[87,90)</td>
+				<td class="withBorders" style="border-width: thin thin thin medium">B</td>
+				<td class="withBorders" style="border-width: thin medium thin thin">[83,87)</td>
+				<td class="withBorders" style="border-width: thin thin thin medium">B-</td>
+				<td class="withBorders" style="border-width: thin medium thin thin">[80,83)</td>
+        <td class="withBorders" style="border-width: thin thin thin medium">C+</td>
+				<td class="withBorders">[77,80)</td>
+			</tr>
+	
+			<tr>
+				
+				<td class="withBorders" style="border-width: thin thin thin medium">C</td>
+				<td class="withBorders">[73,77)</td>
+				<td class="withBorders" style="border-width: thin thin thin medium">C-</td>
+				<td class="withBorders">[70,73)</td>
+				<td class="withBorders" style="border-width: thin thin thin medium">D</td>
+				<td class="withBorders" style="border-width: thin medium thin thin">[60,70)</td>
+				<td class="withBorders" style="border-width: thin thin thin medium">E</td>
+				<td class="withBorders" style="border-width: thin medium thin thin">[0,60)</td>
+        <td class="withBorders" style="border-width: thin thin thin medium"></td>
+				<td class="withBorders"></td>
+			</tr>
+	
+			
+		
+		</table>
+     </p>
+     
+
+		<p>In determining borderline grades, I reserve the right to consider
+			perceived student initiative and class participation.
+		</p>
+
+		<p>An incomplete will be given only when a student meets the
+			requirements of the latest Fisk University policies. Earning a
+			low grade is not a valid reason for an incomplete.
+		</p>
+		
+		<!------------------------------------------------------>
+		
+		<h2>Make-Up Policy</h2>
+		
+		<!--
+		<p><b>Quizzes</b> Quizzes cannot be made up. You must be present in class
+            on the day of the quiz in order to receive credit for the quiz.
+		</p> -->
+
+		<p><b>Quizzes and Exams</b> Make-up quizzes/exams will only be given in the event of a documented excused absence 
+			(for example, medical absences require a signed note on letterhead paper from your doctor.) 
+			You must notify me of an excused absence within 24 hours after the missed quiz/exam or no make-up
+			will be allowed. Normally make-up quizzes/exams are somewhat more difficult that the original quiz/exam.
+		</p>
+				
+		
+        
+        
+		
+        
+				
+		<!------------------------------------------------------>
+		<h2>Academic Integrity</h2>
+		<p>Cheating is not tolerated.  <b>Any student caught cheating will fail the course, regardless of their numerical average in the class at the time</b>. 
+			Cheating activities include but are not limited to conferring with one another during a test by text messaging, 
+			talking, hand signals, roaming eyes, and other signals.  Do not allow others to look at answers on your paper.  
+			Do not bring answers or information sheets into the room that can be seen by another person, i.e. cheat sheet, 
+			writing on the arm or other parts of the body, etc. Act responsibly and honestly.  <br>
+			All homework submissions must represent the individual student's work, except in those cases where work has explicitly been 
+			assigned to teams, 
+			in which case the work performed must be that of the team members, with no outside assistance.  
+			Solutions to problems may not be used from other sources, including (but not limited to) other students, 
+			books, magazines, or the Internet.  Discussions with other students regarding homework is allowed only to 
+			the extent of general understanding of the question; however, sharing solutions, solution approaches, or other specific 
+			information on homework problems is considered cheating. All homework submissions must represent the individual student's work, 
+			except in those cases where work has explicitly been assigned to teams, in which case the work performed must be that of the team members, with no outside assistance. <br>
+			<br>
+			Please see the 
+			<a href="https://www.fisk.edu/wp-content/uploads/2020/01/2019-2020-studenthandbookandacademicplanner.pdf">
+			Fisk University Student Handbook</a> for further details.
+		</p>
+
+
+		<!------------------------------------------------------>
+
+		<h2>ADA COMPLIANCE STATEMENT</h2>
+		<p>The Rehabilitation Act of 1973 and the Americans with Disabilities Act (ADA) require that “no qualified person shall, 
+			solely by reason of disability, be denied access to, be excluded from participation in, 
+			or the benefits of services, programs or activities or subjected to discrimination under any program 
+			or activity receiving federal assistance.”<br>
+			Students with disabilities who qualify for academic accommodations must provide notification from Counseling Services and discuss
+			specific needs with the instructor, preferably during the first two weeks of class. 
+			Contact Counseling Services at 329-8776 to assist in arranging appropriate accommodations if you have a disability.
+		</p>
+   
+		<!------------------------------------------------------>
+<!----
+        <h2>Student Succes Center</h2>
+        <p>
+            If you feel you need additional support for this class, you are encouraged to go to 
+            the Student Success Center on the first floor of Ambrose Hall or to call 333-6331 for
+            information regarding tutoring in this class. The SSC provides free peer tutoring for 
+            most 100 and 200 level courses, writing tutorials for papers in all classes, and study 
+            strategy advice. The center staff suggests that students seek help early, although 
+            drop in and contractual tutorials are arranged throughout the semester.
+        </p>
+-->				
+		<!------------------------------------------------------>
+
+		<h2>How to Succeed in this Class</h2>
+		<p><b>Attend Class</b> Showing up on time for every class is the easiest
+			way to improve your grade — not merely because of the credit for
+			attendance, but also because of exposure to the content presented in
+			class.
+		</p>
+		
+		<p><b>Level of Effort</b> Normally a student can expect to spend about
+			two hours of work, outside of class, for each credit unit. Thus a
+			typical expected workload would be about six hours per week outside of
+			class. This is not a course where students read or write essays. Most
+			of your time will be spent experimenting with programs and studying
+			programming language conventions and techniques to understand
+			concepts.
+		</p>
+		
+		<p><b>Prepare for Class</b> Read the chapter sections ahead of time for
+			each class. When reading the material, enter and compile as many of
+			the sample programs as possible. You may be surprised at how much this
+			reinforces the chapter material. Reading ahead of time will make it
+			easier to follow the lecture and it will help you decide what to ask
+			about in class.
+		</p>
+			
+		<p><b>Do the Homework</b> Start working on the homework problems as soon
+			as possible. Often, a problem that stumps you one day will seem
+			obvious a day later. You should view the homework assignments as
+			preparation for the exams. It is imperative that you understand and
+			complete the homework.
+		</p>
+				
+		<p><b>Manage Your Time</b> I encourage you to develop a system to
+			actively manage you priorities and time. You should schedule time each
+			week to complete assignments and to complete readings in advance of
+			class. Effective time management will help you not only in this class
+			but also in the rest of your studies and in your career. Poor time
+			management and late completion of assignments will be detrimental to
+			your learning experience and will be reflected in your grade for the
+			class.
+		</p>
+		
+		<p><b>Stay Organized</b> Organize your class notes and save all of your
+			graded homework assignments. These will be a great resource when
+			studying for the exams. Also be sure to keep your computer files
+			organized. You will write a plethora of programs for this class; it is
+			easy or them to quickly become disorganized.
+		</p>
+		
+		<p><b>Visit Me</b> If you have problems during the semester that affect
+			your coursework, please see me as soon as possible so we can discuss
+			your options for the course. If you find yourself falling behind in
+			the class, please see me. It is likely we can work together to get you
+			back on track.
+		</p>
+		
+		
+                
+				
+		<div id="extended" style="font-family: verdana,arial,sans-serif; color: #333333"> <!-- Outline -->
+            
+<h2>Tentative Course Outline <span style="font-size:70%;">(subject to change)</span></h2>
+<table style="width:100%;" class="calendar">
+<tbody>
+<tr>
+   <th colspan="2" class="calendar">Week</th>
+   <th class="calendar" >Topic</th> 
+</tr>
+
+<!--  Week 1 ====================================================== -->
+
+<tr ><td style="width:5%" rowspan="3" class="calendar"><b>1</b></td>
+   <td style="height:5px; width:15%;" class="calendar">Tues 8/13</td>
+   <td rowspan="3" class="calendar">
+       <strong>First day of class is Tuesday, 8/13</strong><br>
+       Syllabus<br>
+       Topic 1: Arrays<br>
+   </td>
+</tr>
+<tr>
+   <td style="height:5px;" class="calendar">Thur 8/15</td>
+</tr>
+	<tr>
+   <td style="height:5px;" class="calendar">Friday 8/16</td>
+</tr>
+
+
+<!-- Week 2 ====================================================== -->
+
+<tr >
+   <td style="width:5%" rowspan="3" class="calendar"><b>2</b></td>
+   <td style="height:5px; width:15%; " class="calendar">Tues 8/20</td>
+   <td rowspan="3" class="calendar">
+  
+      Topic 1: Arrays
+      
+   </td>
+</tr>
+<tr>
+   <td style="height:5px;" class="calendar">Thur 8/22</td>
+</tr>
+<tr>
+   <td style="height:5px;" class="calendar">Friday 8/23</td>
+</tr>
+
+<!-- Week 3 ====================================================== -->
+
+<tr >
+   <td style="width:5%" rowspan="3" class="calendar"><b>3</b></td>
+   <td style="height:5px; width:15%;" class="calendar">Tues 8/27</td>
+   <td rowspan="3" class="calendar">
+	Topic 2: Lists
+       
+   </td>
+</tr>
+<tr>
+   <td style="height:5px;" class="calendar">Thur 8/29</td>
+</tr>
+	<tr>
+   <td style="height:5px;" class="calendar">Friday 8/30</td>
+</tr>
+
+<!-- Week 4 ====================================================== -->
+
+<tr >
+   <td style="width:5%" rowspan="3" class="calendar"><b>4</b></td>
+   <td style="height:5px; width:15%; " class="calendar ">Tues 9/3</td>
+   <td rowspan="3" class="calendar">
+       Topic 2: Lists
+   </td></tr>
+<tr>
+   <td style="height:5px;" class="calendar">Thur 9/5</td>
+</tr>
+	<tr>
+   <td style="height:5px;" class="calendar">Friday 9/6</td>
+</tr>
+
+<!-- Week 5 ====================================================== -->
+
+<tr >
+   <td style="width:5%" rowspan="3" class="calendar"><b>5</b></td>
+   <td style="height:5px; width:15%; " class="calendar">Tues 9/10</td>
+   <td rowspan="3" class="calendar">
+	   Topic 3: Stacks, Queues, and Deques
+       
+   </td></tr>
+<tr>
+   <td style="height:5px;" class="calendar">Thur 9/12</td>
+</tr>
+<tr>
+   <td style="height:5px;" class="calendar">Friday 9/13</td>
+</tr>
+
+<!-- Week 6 ====================================================== -->
+
+<tr >
+   <td style="width:5%" rowspan="3" class="calendar"><b>6</b></td>
+   <td style="height:5px; width:15%; " class="calendar">Tues 9/17</td>
+   <td rowspan="3" class="calendar">
+	    Topic 3: Stacks, Queues, and Deques
+	   
+       
+   </td></tr>
+<tr>
+   <td style="height:5px;" class="calendar">Thur 9/19</td>
+</tr>
+	<tr>
+   <td style="height:5px;" class="calendar">Friday 9/20</td>
+</tr>
+
+
+<!-- Week 7 ====================================================== -->
+
+<tr >
+   <td style="width:5%" rowspan="3" class="calendar"><b>7</b></td>
+   <td style="height:5px; width:15%; " class="calendar">Tues 9/24</td>
+   <td rowspan="3" class="calendar">
+	   Topic 4: Recursion
+	   
+       
+   </td></tr>
+<tr>
+   <td style="height:5px;" class="calendar">Thur 9/26</td>
+</tr>
+
+	<tr>
+   <td style="height:5px;" class="calendar">Friday 9/27</td>
+</tr>
+
+
+<!-- Week 8 ====================================================== -->
+
+<tr >
+   <td style="width:5%" rowspan="3" class="calendar"><b>8</b></td>
+   <td style="height:5px; width:15%; " class="calendar">Tues 10/1</td>
+    <td rowspan="3" class="calendar">
+	    Topic 4: Recursion
+	   
+         <br>
+        <strong>Midterm Exam (Thursday 10/3)</strong>
+    </td>
+</tr>
+<tr>
+   <td style="height:5px;" class="calendar exam">Thur 10/3</td>
+</tr>
+	<tr>
+   <td style="height:5px;" class="calendar">Friday 10/4</td>
+</tr>
+
+<!-- Week 9 ====================================================== -->
+<tr >
+   <td style="width:5%" rowspan="3" class="calendar "><b>9</b></td>
+   <td style="height:5px; width:15%;" class="calendar noClass">Tues 10/8</td>
+    <td rowspan="3" class="calendar ">
+	   
+      Topic 5: Analysis of Algorithms
+    </td>
+</tr>
+
+<tr>
+   <td style="height:5px;" class="calendar ">Thur 10/10</td>
+</tr>
+	<tr>
+   <td style="height:5px;" class="calendar">Friday 10/11</td>
+</tr>
+
+<!-- Week 10 ====================================================== -->
+
+<tr >
+   <td style="width:5%" rowspan="3" class="calendar"><b>10</b></td>
+   <td style="height:5px; width:15%; " class="calendar ">Tues 10/15</td>
+    <td rowspan="3" class="calendar ">
+        Topic 6: Trees
+    </td>
+</tr>
+<tr>
+   <td style="height:5px;" class="calendar ">Wedn 10/17</td>
+</tr>
+<tr>
+   <td style="height:5px;" class="calendar">Friday 10/18</td>
+</tr>
+	
+<!-- Week 11 ====================================================== -->
+
+<tr >
+   <td style="width:5%" rowspan="3" class="calendar"><b>11</b></td>
+   <td style="height:5px; width:15%; " class="calendar">Tues 10/22</td>
+    <td rowspan="3" class="calendar">
+	   Topic 6: Trees
+        
+    </td>
+</tr>
+<tr>
+   <td style="height:5px;" class="calendar">Thur 10/24</td>
+</tr>
+	<tr>
+   <td style="height:5px;" class="calendar">Friday 10/26</td>
+</tr>
+
+
+<!-- Week 12 ====================================================== -->
+
+<tr >
+   <td style="width:5%" rowspan="3" class="calendar"><b>12</b></td>
+   <td style="height:5px; width:15%; " class="calendar">Tues 10/29</td>
+    <td rowspan="3" class="calendar">
+	    Chapter 6: Trees
+    </td>
+</tr>
+<tr>
+   <td style="height:5px;" class="calendar">Thur 10/31</td>
+</tr>
+<tr>
+   <td style="height:5px;" class="calendar">Friday 11/1</td>
+</tr>
+
+<!-- Week 13 ====================================================== -->
+
+<tr >
+   <td style="width:5%" rowspan="3" class="calendar"><b>13</b></td>
+   <td style="height:5px; width:15%; " class="calendar ">Tues 11/5</td>
+    <td rowspan="3" class="calendar">
+	    Topic 7: Maps and Hash Tables
+    </td>
+</tr>
+<tr>
+   <td style="height:5px;" class="calendar">Thur 11/7</td>
+</tr>
+<tr>
+   <td style="height:5px;" class="calendar">Friday 11/8</td>
+</tr>
+
+<!-- Week 14 ====================================================== -->
+
+<tr >
+   <td style="width:5%" rowspan="3" class="calendar"><b>14</b></td>
+   <td style="height:5px; width:15%; " class="calendar">Tues 11/12</td>
+    <td rowspan="3" class="calendar">
+	 Topic 8: Sorting
+      
+    </td>
+</tr>
+<tr>
+   <td style="height:5px;" class="calendar">Thur 11/14</td>
+</tr>
+
+	<tr>
+   <td style="height:5px;" class="calendar">Friday 11/15</td>
+</tr>
+
+
+<!-- Week 15 ====================================================== -->
+
+<tr >
+   <td style="width:5%" rowspan="3" class="calendar "><b>15</b></td>
+   <td style="height:5px; width:15%; " class="calendar ">Tues 11/19</td>
+    <td rowspan="3" class="calendar ">
+        Topic 8: Sorting
+    </td>
+</tr>
+<tr>
+   <td style="height:5px;" class="calendar noClass">Thur 11/21</td>
+</tr>
+	<tr>
+   <td style="height:5px;" class="calendar noClass">Friday 11/22</td>
+</tr>
+
+
+<!-- Week 16 ====================================================== -->
+
+<tr >
+   <td style="width:5%" rowspan="3" class="calendar "><b>16</b></td>
+   <td style="height:5px; width:15%;" class="calendar ">Tues 11/26</td>
+    <td rowspan="3" class="calendar ">
+        Topic 9: Graphs
+    </td>
+</tr>
+
+<tr>
+   <td style="height:5px;" class="calendar ">Thur 11/28</td>
+</tr>
+
+	<tr>
+   <td style="height:5px;" class="calendar">Friday 11/29</td>
+</tr>
+	
+<!-- Week 17 ====================================================== -->
+
+<tr >
+   <td style="width:5%" rowspan="2" class="calendar "><b>17&18</b></td>
+   <td style="height:5px; width:15%;" class="calendar ">Tues 12/3</td>
+    <td rowspan="2" class="calendar ">
+        Final Review(Tues 12/3) <br>
+	     <strong>The Final Exam is on to-be-updated</strong> 
+    </td>
+</tr>
+
+<tr>
+   <td style="height:5px;" class="calendar ">Wedn 12/4 ~ Tues 12/10</td>
+</tr>
+
+
+<!-- Week 18 ====================================================== -->
+<!--
+<tr >
+    <td style="width:5%" class="calendar"><b>18</b></td>
+    <td style="height:5px; width:15%; " class="calendar exam">Tues 12/6</td>
+    <td rowspan="2" class="calendar exam">
+        <strong>The Final Exam is on to-be-updated</strong>
+    </td>
+</tr>
+	-->
+</tbody>
+</table>
+
+			
+		</div> <!-- End Online -->
+<h2>Disclaimer</h2>
+			<p>The instructor reserves the right to alter any portion of this syllabus to suit the need of the class. If, and when that happens the class will be informed prior to implementation of the changes.</p>
+
+
+	</div> <!-- Main Points -->
+	
+	<div id="footer" class="shadow"> <!-- Footer -->
+		&nbsp;
+	</div> <!-- End footer -->
+	
+	
+</div> <!-- End entire body -->
+
+</body>
+</html>
