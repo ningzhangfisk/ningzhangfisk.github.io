@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Grade Calculator – Excel Uploader</title>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <style>
+    :root {
+      --bg: #0f172a; /* slate-900 */
+      --card: #111827; /* gray-900 */
+      --muted: #94a3b8; /* slate-400 */
+      --text: #e5e7eb; /* gray-200 */
+      --accent: #22d3ee; /* cyan-400 */
+      --accent2: #a78bfa; /* violet-400 */
+      --good: #10b981; /* emerald-500 */
+      --warn: #f59e0b; /* amber-500 */
+      --bad: #ef4444; /* red-500 */
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; padding: 24px; font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      background: radial-gradient(1200px 600px at 20% 0%, rgba(34,211,238,.08), transparent 60%),
+                  radial-gradient(900px 600px at 80% 0%, rgba(167,139,250,.10), transparent 60%),
+                  var(--bg);
+      color: var(--text);
+    }
+    h1 { font-size: 1.5rem; margin: 0 0 8px; }
+    p { color: var(--muted); margin-top: 0; }
+    .card {
+      background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 16px; padding: 20px; box-shadow: 0 10px 30px rgba(0,0,0,.25);
+    }
+    .controls { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; margin: 12px 0 20px; }
+    .btn {
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      border: none; color: #001018; font-weight: 700; padding: 10px 14px; border-radius: 10px; cursor: pointer;
+    }
+    .ghost { background: transparent; color: var(--text); border: 1px solid rgba(255,255,255,.15); }
+    input[type="file"] { display: none; }
+    label.file {
+      border: 1px dashed rgba(255,255,255,.2); border-radius: 10px; padding: 10px 14px; cursor: pointer; color: var(--text);
+    }
+    .grid { overflow:auto; border-radius: 12px; border: 1px solid rgba(255,255,255,.1); }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { padding: 10px 12px; border-bottom: 1px solid rgba(255,255,255,.06); vertical-align: top; }
+    th { text-align: left; background: rgba(255,255,255,.04); position: sticky; top: 0; }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+    .pill { display:inline-block; padding: 2px 8px; border-radius: 999px; font-size: .8rem; border:1px solid rgba(255,255,255,.15); color: var(--muted); }
+    .ok { color: var(--good); }
+    .warn { color: var(--warn); }
+    .bad { color: var(--bad); }
+    .small { font-size: .9rem; color: var(--muted); }
+    .weights { font-size: .85rem; color: var(--muted); }
+    .footer { margin-top: 16px; color: var(--muted); font-size: .9rem; }
+    .hint { color: var(--muted); font-size:.9rem; }
+    .flex { display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+    .spacer { flex: 1 1 auto; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Grade Calculator - CSCI120 & CSCI241</h1>
+    <p>Step 1 - Download Template with columns: <b>Week</b>, <b>Homework</b>, <b>Lab</b>, <b>Quiz</b>, <b>Midterm</b>, <b>Final</b></p>
+    <p>Step 2 - Fill out the form with your grades for each part. For <b>Homework</b>, <b>Lab</b>, if the total scores is <b>NOT</b> 100, provide the grade in this format <b>your_score/total_score</b>. For example, if the total score of an assignment is 60 and you receive 50, put 50/60.</p>
+    <p>Step 3 - Upload the Excel</p>
+    <p>Step 4 - This tool computes a weighted current average using weights 30%, 15%, 15%, 15%, 25%.<br>
+      <span class="hint">If <b>Quiz</b>, <b>Midterm</b>, or <b>Final</b> is not taken (blank), their weights are excluded and remaining weights are re‑normalized. If there are <b>more than two quizzes</b> in the Quiz cell, the <b>lowest quiz is dropped</b>. </span>
+
+     <br>
+     
+    </p>
+
+    <div class="controls">
+      <label class="file" for="file">Choose Excel (.xlsx/.xls)</label>
+      <input id="file" type="file" accept=".xlsx,.xls" />
+
+     
+
+      <button class="btn ghost" id="downloadTemplate">Download Template</button>
+      <div class="spacer"></div>
+      <div class="weights">
+        Base Weights → Homework 30% · Lab 15% · Quiz 15% · Midterm 15% · Final 25%
+      </div>
+    </div>
+
+    <div id="results" class="grid" style="display:none">
+      <table id="table">
+        <thead>
+          <tr>
+            <th>Week</th>
+            <th>Homework</th>
+            <th>Lab</th>
+            <th>Quiz (lowest dropped if > 2)</th>
+            <th>Midterm</th>
+            <th>Final</th>
+            <!-- <th>Used Weights</th> -->
+            <th>Current Average</th>
+            <th>Notes</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <div>
+    <canvas id="gradeChart" width="400" height="200"></canvas>
+  </div>
+
+    <div id="summary" class="footer" style="display:none"></div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+  
+
+  <script>
+    // --- Helpers ---
+    const baseWeights = { Homework: 0.30, Lab: 0.15, Quiz: 0.15, Midterm: 0.15, Final: 0.25 };
+
+    var hw_total = 0;
+    var lab_total = 0;
+    var quiz_total = 0;
+    var quizzes = [];
+    const midterm_total = 100;
+    const final_total = 100;
+
+    var hw_earn = 0;
+    var lab_earn = 0;
+    var quiz_earn = 0;
+    var midterm_earn = 0;
+    var final_earn = 0;
+
+    var num_of_quizzes = 0;
+
+    var avgs = [];
+
+
+
+    function parseNumber(val) {
+      if (val === undefined || val === null) return NaN;
+      if (typeof val === 'number') return val;
+      const trimmed = String(val).trim();
+      if (!trimmed) return NaN;
+      // Support comma/semicolon separated lists
+      if (/[;,/]/.test(trimmed)) {
+        const parts = trimmed.split(/[;,/]/).map(s => Number(String(s).trim())).filter(n => !isNaN(n));
+        return parts; // return array for Quiz case
+      }
+      const n = Number(trimmed);
+      return isNaN(n) ? NaN : n;
+    }
+
+    function average(nums) {
+      if (!nums || !nums.length) return NaN;
+      const sum = nums.reduce((a,b)=>a+b,0);
+      return sum / nums.length;
+    }
+
+    function getLetterGrade(score) {
+      if (score >= 90 && score <= 100) return "A";
+      if (score >= 87 && score < 90) return "B+";
+      if (score >= 83 && score < 87) return "B";
+      if (score >= 80 && score < 83) return "B-";
+      if (score >= 77 && score < 80) return "C+";
+      if (score >= 73 && score < 77) return "C";
+      if (score >= 70 && score < 73) return "C-";
+      if (score >= 60 && score < 70) return "D";
+      if (score >= 0 && score < 60) return "E";
+
+  return "Invalid"; // for scores outside 0–100
+  }
+
+    function computeQuiz(quizVal) {
+      // quizVal may be number, array, NaN
+      if (Array.isArray(quizVal)) {
+        if (quizVal.length === 0) return { value: NaN, detail: 'No quiz scores' };
+        if (quizVal.length > 2) {
+          const sorted = [...quizVal].sort((a,b)=>a-b);
+          const dropped = sorted[0];
+          const kept = sorted.slice(1);
+          return { value: average(kept), detail: `Dropped lowest: ${dropped}; used ${kept.join(', ')}` };
+        } else {
+          return { value: average(quizVal), detail: `Used ${quizVal.join(', ')}` };
+        }
+      } else if (typeof quizVal === 'number' && !isNaN(quizVal)) {
+        return { value: quizVal, detail: 'Single quiz value' };
+      } else {
+        return { value: NaN, detail: 'No quiz provided' };
+      }
+    }
+
+    function renormalizeWeights(values) {
+      // values: {Homework: number|NaN, Lab: ..., Quiz: ..., Midterm: ..., Final: ...}
+      const activeKeys = Object.keys(values).filter(k => !isNaN(values[k]));
+      const sumWeights = activeKeys.reduce((acc,k)=>acc + baseWeights[k], 0);
+      const used = {};
+      activeKeys.forEach(k => { used[k] = baseWeights[k] / (sumWeights || 1); });
+      return used; // weights sum to 1 across available categories
+    }
+
+function plotGradeCurve(weeklyAverages) {
+  const canvas = document.getElementById("gradeChart");
+  if (!canvas) return;
+  const ctx = canvas.getContext("2d");
+
+  const labels = weeklyAverages.map((_, i) => "Week " + (i + 1));
+
+  // Safely destroy existing chart
+  if (window.gradeChart instanceof Chart) {
+    window.gradeChart.destroy();
+  }
+
+  window.gradeChart = new Chart(ctx, {
+    type: "line",
+    data: {
+      labels,
+      datasets: [{
+        label: "Weekly Average (%)",
+        data: weeklyAverages,
+        borderColor: "#4F46E5",
+        backgroundColor: "rgba(79,70,229,0.2)",
+        borderWidth: 2,
+        tension: 0.3,
+        pointRadius: 4,
+        pointBackgroundColor: "#4F46E5"
+      }]
+    },
+    options: {
+      plugins: {
+        tooltip: {
+          callbacks: {
+            // Title already shows the week label by default
+            label: function(context) {
+              const score = context.parsed.y;
+              const letter = getLetterGrade(score);
+              return `Score: ${score.toFixed(2)}% (${letter})`;
+            }
+          }
+        }
+      },
+      scales: {
+        y: {
+          suggestedMin: 0,
+          suggestedMax: 100,
+          title: {
+            display: true,
+            text: "Score (%)"
+          }
+        },
+        x: {
+          title: {
+            display: true,
+            text: "Week"
+          }
+        }
+      }
+    }
+  });
+}
+  
+
+    async function loadOnlineExcel(url) {
+      const response = await fetch(url);
+      const arrayBuffer = await response.arrayBuffer();
+
+      const workbook = XLSX.read(arrayBuffer, { type: "array" });
+
+      const sheetName = workbook.SheetNames[0];
+      const sheet = workbook.Sheets[sheetName];
+
+      const data = XLSX.utils.sheet_to_json(sheet, { defval: "" });
+      return data;
+    }
+
+    function fmtPct(n) { return isNaN(n) ? '—' : (n.toFixed(2) + '%'); }
+
+    function buildTemplateWB() {
+      const data = [
+        ['Week','Homework','Lab','Quiz','Midterm','Final'],
+        [1,90, 88, '', '', '' ],
+        [2,100, 95, '', '', '' ],
+        [3,75,  77, '', '', '' ],
+        [4,62,  '55/60', '', '', '' ],
+        [5, '45/50',90, '78', '', '' ],
+        [6, '',  '', '', '', '' ],
+        [7, '',  '', '', '', '' ],
+        [8, '',  '', '', '93', '' ],
+        [9, '',  '', '', '', '' ],
+        [10, '',  '', '89', '', '' ],
+        [11, '',  '', '', '', '' ],
+        [12, '',  '', '', '', '' ],
+        [13, '',  '', '', '', '' ],
+        [14, '',  '', '92', '', '' ],
+        [15, '',  '', '', '', '' ],
+        [16, '',  '', '', '', '89' ],
+      ];
+      const ws = XLSX.utils.aoa_to_sheet(data);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, 'Grades');
+      return wb;
+    }
+
+
+
+
+    document.getElementById('downloadTemplate').addEventListener('click', () => {
+      const wb = buildTemplateWB();
+      XLSX.writeFile(wb, 'grade_template.xlsx');
+    });
+
+    document.getElementById('file').addEventListener('change', function(e){
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(evt){
+        const data = new Uint8Array(evt.target.result);
+        const wb = XLSX.read(data, { type: 'array' });
+        const sheetName = wb.SheetNames[0];
+        const ws = wb.Sheets[sheetName];
+        const rows = XLSX.utils.sheet_to_json(ws, { defval: '' });
+        render(rows);
+      };
+      reader.readAsArrayBuffer(file);
+    });
+
+    function render(rows) {
+      const tb = document.querySelector('#table tbody');
+      tb.innerHTML = '';
+
+      let classSum = 0, classCount = 0;
+      let curHw = 100;
+      let curLab = 100;
+
+      let noteBits = [];
+
+      rows.forEach((row, idx) => {
+        // Parse inputs
+        const hw = parseNumber(row['Homework']);
+
+        if(typeof hw === 'number' && !isNaN(hw)){
+          hw_earn = hw_earn + hw;
+          hw_total =hw_total + 100;
+          //row['Homework'] = row['Homework'] + '/100';
+        }else if(Array.isArray(hw)){
+          hw_earn = hw_earn + hw[0];
+          hw_total =hw_total + hw[1];
+          curHw = hw[1];
+        }
+
+
+
+       
+        const lab = parseNumber(row['Lab']);
+        if(typeof lab === 'number' && !isNaN(lab)){
+          lab_earn = lab_earn + lab;
+          lab_total =lab_total + 100;
+          //row['Lab'] = row['Lab'] + '/100';
+        }else if(Array.isArray(lab)){
+          lab_earn = lab_earn + lab[0];
+          lab_total =lab_total + lab[1];
+          curLab = lab[1];
+        }
+        
+        const quiz = parseNumber(row['Quiz']);
+        if(typeof quiz === 'number' && !isNaN(quiz)){
+          quiz_earn = quiz_earn + quiz;
+          quiz_total =quiz_total + 100;
+          quizzes.push(quiz);
+        }
+
+        const mid = parseNumber(row['Midterm']);
+        if(typeof mid === 'number' && !isNaN(mid)){
+          midterm_earn = mid;
+        }
+
+        const fin = parseNumber(row['Final']);
+        if(typeof fin === 'number' && !isNaN(fin)){
+          final_earn = fin;
+        }
+
+        const values = {
+          Homework: (typeof hw === 'number' && !isNaN(hw)) ? hw : NaN,
+          Lab: (typeof lab === 'number' && !isNaN(lab)) ? lab : NaN,
+          Quiz: (typeof quiz === 'number' && !isNaN(quiz)) ? quiz : NaN,
+          Midterm: (typeof mid === 'number' && !isNaN(mid)) ? mid : NaN,
+          Final: (typeof fin === 'number' && !isNaN(fin)) ? fin : NaN,
+        };
+
+        
+
+        const usedW = renormalizeWeights(values);
+
+        let weighted = 0, wsum = 0;
+        const parts = [];
+        Object.entries(usedW).forEach(([k,w]) => {
+          const val = values[k];
+          if (!isNaN(val)) {
+            weighted += val * w; wsum += w;
+            parts.push(`${k} ${Math.round(w*100)}%`);
+          }
+        });
+        let avg = (wsum > 0) ? (weighted / wsum) : NaN;
+
+        if (!isNaN(avg)) { classSum += avg; classCount++; }
+
+
+        avg = 0;
+        let used_weights = 0;
+        noteBits = [];
+        if(hw_earn > 0){
+          avg += hw_earn/hw_total*baseWeights['Homework'];
+          used_weights += baseWeights['Homework'];
+          noteBits.push("Homework: " + hw_earn + "/" + hw_total);
+        } 
+        if(lab_earn > 0) {
+          avg += lab_earn/lab_total*baseWeights['Lab'];
+          used_weights += baseWeights['Lab'];
+          noteBits.push("Lab: " + lab_earn + "/" + lab_total);
+        }
+        if(quizzes.length > 0){
+          if(quizzes.length<3){
+            avg += quiz_earn/quiz_total*baseWeights['Quiz'];
+            noteBits.push("Quiz: " + quiz_earn + "/" + quiz_total);
+          }
+          else{
+            const sorted = [...quizzes].sort((a,b)=>a-b);
+            const dropped = sorted[0];
+            const kept = sorted.slice(1);
+            const sum = kept.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+            avg += sum/(kept.length*100)*baseWeights['Quiz'];
+            noteBits.push("Quiz: " + sum + "/" + (kept.length*100) + "(" + "lowest grade dropped)");
+          }
+          used_weights += baseWeights['Quiz'];
+
+        }
+        if(midterm_earn > 0) {
+          avg += midterm_earn/midterm_total*baseWeights['Midterm'];
+          used_weights += baseWeights['Midterm'];
+          noteBits.push("Midterm: " + midterm_earn + "/" + midterm_total);
+        }
+        if(final_earn > 0) {
+          avg += final_earn/final_total*baseWeights['Final'];
+          used_weights += baseWeights['Final'];
+          noteBits.push("Final: " + final_earn + "/" + final_total);
+        }
+
+        if(avg>0) avg = avg/used_weights;
+
+        avg *= 100;
+        letter  = getLetterGrade(avg);
+
+        avgs.push(avg);
+
+
+
+
+        const tr = document.createElement('tr');
+        
+        
+
+        tr.innerHTML = `
+          <td class="mono">${idx+1}</td>
+          <td>${(row['Homework'])}</td>
+          <td>${(row['Lab'])}</td>
+          <td>${(row['Quiz'])}</td>
+          <td>${(row['Midterm'])}</td>
+          <td>${(row['Final'])}</td>
+      <!--    <td class="small">${parts.join(' · ') || '—'}</td> -->
+          <td><b>${avg.toFixed(2) + "/" + letter}</b></td>
+          <td class="small">${noteBits.join(' | ')}</td>
+        `;
+        tb.appendChild(tr);
+      });
+
+      document.getElementById('results').style.display = 'block';
+      const classAvg = classCount ? (classSum / classCount) : NaN;
+
+      plotGradeCurve(avgs);
+
+      document.getElementById('summary').style.display = 'block';
+      document.getElementById('summary').innerHTML = `<b>Any Questions? Email to nzhang@fisk.edu</b>`;
+      
+    }
+  </script>
+</body>
+</html>
